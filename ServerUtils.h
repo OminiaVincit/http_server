@@ -8,24 +8,13 @@
  * 			Connect socket, socket handle
 */
 
-#include <stdio.h>
-#include <string.h>		/* for memset() function */
-#include <time.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <netdb.h>
-
 #define PORT "22609"  /* My port to listen on, in test server = uuid + 21600 */
 #define LISTENQ 10  /* Default pass to listen */
 #define MAXBUF 4096
 #define EXIT_FAILURE 1
 
 /* For debug */
-#define DEBUG
+//#define DEBUG
 
 /* Error handling */
 void err_handle( char * msg );

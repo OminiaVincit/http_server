@@ -1,4 +1,6 @@
 # Makefile
+# Created by Tran Quoc Hoan 
+# Network computing assignment 2
 
 # Define program & objects name
 THREAD = HttpThread

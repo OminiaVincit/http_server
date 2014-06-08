@@ -1,12 +1,23 @@
 /*
  * Network computing
- * 		Assignment 2: A HTTP forked server program
+ * 		Assignment 2: A HTTP thread server program
  *      Written by Tran Quoc Hoan
  *			programmed by milestones method (step by step)
  * 		Usage: ./HttpThread serverIP
 */
 
 #include <pthread.h>
+#include <stdio.h>
+#include <string.h>		/* for memset() function */
+#include <time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <netdb.h>
+
 #include "ServerUtils.h"
 
 void *send_recv_thread( void *arg ) {
@@ -21,7 +32,7 @@ void *send_recv_thread( void *arg ) {
 int main ( int argc, char* argv[] ) {
 	/* Usage */
 	if ( argc != 2 ) {
-		fprintf ( stderr, "Usage: %s <Server IPaddress>\n", argv[0] );
+		fprintf ( stderr, "Usage: %s <Server Name or IPaddress>\n", argv[0] );
 		return 0;
 	}
 	

@@ -6,6 +6,17 @@
  * 		Usage: ./http_forked serverIP
 */
 
+#include <stdio.h>
+#include <string.h>		/* for memset() function */
+#include <time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <netdb.h>
+
 #include "ServerUtils.h"
 
 /* Signal handler for zoombie processs */
@@ -16,7 +27,7 @@ static void wait_for_child( int sig ) {
 int main ( int argc, char* argv[] ) {
 	/* Usage */
 	if ( argc != 2 ) {
-		fprintf ( stderr, "Usage: %s <Server IPaddress>\n", argv[0] );
+		fprintf ( stderr, "Usage: %s <Server Name or IPaddress>\n", argv[0] );
 		return 0;
 	}
 	

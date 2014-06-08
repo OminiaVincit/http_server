@@ -7,19 +7,21 @@
  *		ServerUtils.c		
  * 			Connect socket, socket handle
 */
+#include <stdio.h>
+#include <string.h>		/* for memset() function */
+#include <time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <netdb.h>
 
 #include "ServerUtils.h"
 
-#define PORT "22609"  /* My port to listen on, in test server = uuid + 21600 */
-#define LISTENQ 10  /* Default pass to listen */
-#define MAXBUF 4096
-#define EXIT_FAILURE 1
-
 #define TRUE 1
 #define FALSE 0
-
-/* For debug */
-#define DEBUG
 
 /* Error handling */
 void err_handle( char * msg ) {
@@ -43,6 +45,10 @@ void send_home( int sock ) {
 		"<font color=red><h1>HELLO! Redirect to index.html for more information.</h1></font>\r\n", 
 		asctime( date ) );
     send( sock, outbuf, (int)strlen(outbuf), 0);
+#ifdef DEBUG
+	printf("Finish send_home \n");
+#endif
+	return;
 }
 
 /* Send html header */
@@ -59,7 +65,10 @@ void send_header( int sock ) {
   	    "Content-Type:text/html\r\n"
 		"Date: %s\r\n", asctime( date ) );
     send( sock, outbuf, (int)strlen(outbuf), 0);
-  
+#ifdef DEBUG
+	printf("Finish send_header \n");
+#endif
+	return;
 }
 
 /* Send html data */
@@ -68,10 +77,15 @@ void send_data( int sock, FILE* fp ) {
 	char outbuf[ MAXBUF + 1];
 	memset( &outbuf, 0, sizeof(outbuf) );
 	
-	while (fp != EOF ) {
+	while ( !feof(fp) ) {
 		len = fread( outbuf, 1, sizeof( outbuf ), fp );
+		outbuf[len] ='\0';
 		send ( sock, outbuf, len, 0 );
 	}
+#ifdef DEBUG
+	printf("Finish send_data \n");
+#endif
+	return;
 }
 
 /* Send html file */
@@ -86,6 +100,10 @@ void send_html( int sock, const char* FILENAME ) {
 		send_data( sock, fp );
 		fclose( fp );
 	}
+#ifdef DEBUG
+	printf("Finish send_html \n");
+#endif
+	return;
 }
 
 /* Handle for each socket */
@@ -128,8 +146,6 @@ int sock_handle( int newsock ) {
 		send_html( newsock, request_file );
 	}
 	
-  // close()
-  close( newsock );
   return TRUE;
 }
 
